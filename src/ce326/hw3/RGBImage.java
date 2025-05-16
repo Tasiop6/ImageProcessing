@@ -6,10 +6,10 @@ public class RGBImage implements Image {
      */
     public static final int MAX_COLORDEPTH = 255;
 
-    private int width;
-    private int height;
-    private int colorDepth;
-    private RGBPixel[][] pixels;
+    int width;
+    int height;
+    int colorDepth;
+    RGBPixel[][] pixels;
 
     /**
      * Default constructor. Required for subclassing (e.g., PPMImage).
@@ -51,19 +51,11 @@ public class RGBImage implements Image {
         }
     }
 
-    /**
-     * Constructs an RGBImage from a YUVImage.
-     * Implementation to be added later.
-     *
-     * @param YUVImg source YUV image
-     */
     public RGBImage(YUVImage YUVImg) {
         // TODO: convert YUVImage to RGBImage
     }
 
-    /**
-     * @return image width
-     */
+    // Return image width
     public int getWidth() {
         return width;
     }
