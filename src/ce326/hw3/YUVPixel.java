@@ -18,7 +18,7 @@ public class YUVPixel {
         this.v = p.v;
     }
 
-    // Convert RGBPixel to YUVPixel
+    // RGBPixel to YUVPixel
     public YUVPixel(RGBPixel p) {
         int R = p.getRed();
         int G = p.getGreen();
