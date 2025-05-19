@@ -41,25 +41,23 @@ public class Histogram {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
+        // format each intensity line from 0 to 255
         for (int i = 0; i < 256; i++) {
             int count = hist[i];
-            sb.append("\n")
-                    .append(String.format("%3d.", i))    // intensity label
-                    .append("[")
-                    .append(String.format("%4d", count)) // count in brackets
-                    .append("]\t");
-            // decompose count digits
+            // line header: intensity index and count in parentheses
+            sb.append(String.format(" %3d.(%4d)	", i, count));
+            // decompose count into place values for symbols
             int thousands = count / 1000;
             int hundreds  = (count % 1000) / 100;
             int tens      = (count % 100)  / 10;
             int ones      = count % 10;
-            // append symbols for each place value
+            // append symbols: # for thousands, $ for hundreds, @ for tens, * for ones
             for (int t = 0; t < thousands; t++) sb.append('#');
             for (int h2 = 0; h2 < hundreds;  h2++) sb.append('$');
             for (int t2 = 0; t2 < tens;      t2++) sb.append('@');
             for (int o = 0; o < ones;       o++) sb.append('*');
         }
-        sb.append("\n");  // extra newline at end
+        sb.append("\n");  // final newline
         return sb.toString();
     }
 

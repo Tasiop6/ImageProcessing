@@ -5,13 +5,12 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-// represents an image in YUV color space
 public class YUVImage {
     private int width;
     private int height;
     private YUVPixel[][] pixels;
 
-    // create an empty image with Y=16, U=128, V=128
+    // Empty image with Y=16, U=128, V=128
     public YUVImage(int width, int height) {
         this.width = width;
         this.height = height;
@@ -23,7 +22,7 @@ public class YUVImage {
         }
     }
 
-    // copy constructor
+    // Copy constructor
     public YUVImage(YUVImage img) {
         this.width = img.width;
         this.height = img.height;
@@ -35,7 +34,7 @@ public class YUVImage {
         }
     }
 
-    // construct by converting each RGB pixel
+    // RGBImage to YUVImage
     public YUVImage(RGBImage rgb) {
         this.width = rgb.getWidth();
         this.height = rgb.getHeight();
@@ -47,10 +46,10 @@ public class YUVImage {
         }
     }
 
-    // read from a .yuv file in YUV3 format
+    // Read from a .yuv file
     public YUVImage(File file) throws FileNotFoundException, UnsupportedFileFormatException {
         Scanner in = new Scanner(file);
-        String header = in.next();                     // read magic string
+        String header = in.next();
         if (!header.equals("YUV3")) {
             in.close();
             throw new UnsupportedFileFormatException("Unsupported format: " + header);
@@ -70,7 +69,7 @@ public class YUVImage {
         in.close();
     }
 
-    // return the image in YUV3 text format
+    // YUV3  format String
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -88,37 +87,41 @@ public class YUVImage {
         return sb.toString();
     }
 
-    // write the image to a .yuv file
+    // image to a .yuv file
     public void toFile(File file) throws FileNotFoundException {
         try (PrintWriter out = new PrintWriter(file)) {
             out.print(this.toString());
         }
     }
 
-    // histogram-equalize the Y channel (max Y = 235)
+    // Equalize histogram in the Y* channel (max Y = 235) (*Y controls brightness)
     public void equalize() {
         int[] hist = new int[256];
         int total = width * height;
-        // build histogram of Y values
+
+        // Step 1: Histogram of Y values
         for (int r = 0; r < height; r++) {
             for (int c = 0; c < width; c++) {
                 hist[pixels[r][c].getY()]++;
             }
         }
-        // build cumulative distribution
+
+        // Step 2: Cumulative distribution function (CDF) from histogram
         int[] cdf = new int[256];
         cdf[0] = hist[0];
         for (int i = 1; i < 256; i++) {
             cdf[i] = cdf[i - 1] + hist[i];
         }
-        // build lookup table scaling to max Y = 235
+
+        // Step 3: Lookup table (LUT) to map old Y to new Y
         int maxY = 235;
         int[] lut = new int[256];
         for (int i = 0; i < 256; i++) {
             // integer division drops fractional part
             lut[i] = (cdf[i] * maxY) / total;
         }
-        // remap each pixel's Y via LUT
+
+        // Step 4: Apply the LUT to each pixel's Y value
         for (int r = 0; r < height; r++) {
             for (int c = 0; c < width; c++) {
                 short newY = (short) lut[pixels[r][c].getY()];
@@ -127,17 +130,14 @@ public class YUVImage {
         }
     }
 
-    // return image width
     public int getWidth() {
         return width;
     }
 
-    // return image height
     public int getHeight() {
         return height;
     }
 
-    // return the YUVPixel at (row, col)
     public YUVPixel getPixel(int row, int col) {
         return pixels[row][col];
     }
