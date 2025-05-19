@@ -7,30 +7,29 @@ import java.util.Scanner;
 
 public class PPMImage extends RGBImage {
 
-    // default constructor
     public PPMImage() {
         super();
     }
 
-    // read a P3 PPM file
+    // read a PPM file
     public PPMImage(File file) throws FileNotFoundException, UnsupportedFileFormatException {
         Scanner in = new Scanner(file);
-        String magic = in.next();              // read "P3"
-        if (!magic.equals("P3")) {
+        String header = in.next();              // read "P3"
+        if (!header.equals("P3")) {
             in.close();
-            throw new UnsupportedFileFormatException("Unsupported format: " + magic);
+            throw new UnsupportedFileFormatException("Unsupported format: " + header);
         }
         int w = in.nextInt();                  // image width
         int h = in.nextInt();                  // image height
         int maxVal = in.nextInt();             // max color depth
 
-        // initialize inherited fields
+        // initialize fields
         super.width = w;
         super.height = h;
         super.colorDepth = maxVal;
         super.pixels = new RGBPixel[h][w];
 
-        // read pixels in row-major order
+        // read pixels in order
         for (int r = 0; r < h; r++) {
             for (int c = 0; c < w; c++) {
                 short red   = (short) in.nextInt();
@@ -42,7 +41,6 @@ public class PPMImage extends RGBImage {
         in.close();
     }
 
-    // construct from an existing RGBImage
     public PPMImage(RGBImage img) {
         super(img);
     }
@@ -52,7 +50,7 @@ public class PPMImage extends RGBImage {
         super(img);
     }
 
-    // return the PPM file content (P3 format)
+    // return the PPM file content
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
