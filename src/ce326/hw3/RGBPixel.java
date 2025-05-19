@@ -1,71 +1,70 @@
 package ce326.hw3;
 
 public class RGBPixel {
-    // each component in [0..255]
+    // [0..255]
     private short red;
     private short green;
     private short blue;
 
-    /**
-     * Constructs a pixel with the given red, green, blue values.
-     * @param red   red component [0..255]
-     * @param green green component [0..255]
-     * @param blue  blue component [0..255]
-     */
     public RGBPixel(short red, short green, short blue) {
         setRGB(red, green, blue);
     }
 
-    /**
-     * Copy constructor.
-     * @param pixel existing RGBPixel to copy
-     */
+    // Copy constructor
     public RGBPixel(RGBPixel pixel) {
         this(pixel.getRed(), pixel.getGreen(), pixel.getBlue());
     }
 
-    /**
-     * Constructs an RGBPixel from a YUVPixel.
-     * Implementation to be added later.
-     * @param pixel source YUVPixel
-     */
-    public RGBPixel(YUVPixel pixel) {
-        // TODO: implement YUV to RGB conversion
+    // An RGBPixel from a YUVPixel
+    public RGBPixel(YUVPixel yp) {
+        // read YUV
+        int Y = yp.getY();
+        int U = yp.getU();
+        int V = yp.getV();
+
+        // Conversion
+        int C = Y - 16;
+        int D = U - 128;
+        int E = V - 128;
+        int rInt = (298*C + 409*E + 128) >> 8;
+        int gInt = (298*C - 100*D - 208*E + 128) >> 8;
+        int bInt = (298*C + 516*D + 128) >> 8;
+
+        // clamp 0-255
+        if      (rInt < 0)   rInt = 0;  else if (rInt > 255) rInt = 255;
+        if      (gInt < 0)   gInt = 0;  else if (gInt > 255) gInt = 255;
+        if      (bInt < 0)   bInt = 0;  else if (bInt > 255) bInt = 255;
+
+        this.red   = (short) rInt;
+        this.green = (short) gInt;
+        this.blue  = (short) bInt;
     }
 
-    /** @return red component [0..255] */
     public short getRed() {
         return red;
     }
 
-    /** @return green component [0..255] */
     public short getGreen() {
         return green;
     }
 
-    /** @return blue component [0..255] */
     public short getBlue() {
         return blue;
     }
 
-    /** @param red new red component [0..255] */
     public void setRed(short red) {
         this.red = red;
     }
 
-    /** @param green new green component [0..255] */
     public void setGreen(short green) {
         this.green = green;
     }
 
-    /** @param blue new blue component [0..255] */
     public void setBlue(short blue) {
         this.blue = blue;
     }
 
-    /**
-     * @return packed int 0xRRGGBB using arithmetic (no bit shifts).
-     */
+    // Returns int containing RGB
     public int getRGB() {
         int r = red;
         int g = green;
@@ -73,10 +72,7 @@ public class RGBPixel {
         return r * 256 * 256 + g * 256 + b;
     }
 
-    /**
-     * Sets RGB components from packed int 0xRRGGBB using arithmetic (no bit shifts).
-     * @param value packed RGB value
-     */
+    // Sets RGB  from int
     public void setRGB(int value) {
         short r = (short)(value / (256 * 256));
         short g = (short)((value / 256) % 256);
@@ -84,21 +80,14 @@ public class RGBPixel {
         setRGB(r, g, b);
     }
 
-    /**
-     * Sets RGB components from individual values.
-     * @param red   red component [0..255]
-     * @param green green component [0..255]
-     * @param blue  blue component [0..255]
-     */
+    // Sets RGB components from individual values
     public final void setRGB(short red, short green, short blue) {
         setRed(red);
         setGreen(green);
         setBlue(blue);
     }
 
-    /**
-     * Returns a string in the form "R G B".
-     */
+    // String in the form "R G B"
     @Override
     public String toString() {
         return getRed() + " " + getGreen() + " " + getBlue();
