@@ -7,7 +7,7 @@ import java.io.*;
 import javax.swing.*;
 import javax.imageio.*;
 
-public class ImageProcessing {
+public class ImageProcessingUI {
     JFrame frame;
     JPanel mainPanel;
     JLabel imgLabel;
@@ -24,7 +24,7 @@ public class ImageProcessing {
     public static final int MINIMUM_WIDTH = 500;
     public static final int MINIMUM_HEIGHT = 400;
 
-    public ImageProcessing() {
+    public ImageProcessingUI() {
         frame = new JFrame("CE325 HW3");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainPanel = new JPanel(new BorderLayout());
@@ -40,7 +40,7 @@ public class ImageProcessing {
     }
 
     public static void main(String []args) {
-        ImageProcessing frame = new ImageProcessing();
+        ImageProcessingUI frame = new ImageProcessingUI();
     }
 
     public void enableMenu() {

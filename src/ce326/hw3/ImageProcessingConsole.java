@@ -3,7 +3,7 @@ package ce326.hw3;
 import java.util.*;
 import java.io.*;
 
-public class ImageProcessing2 {
+public class ImageProcessingConsole {
 
     public static void main(String []args) throws FileNotFoundException {
         PPMImage rgbImg = null;
